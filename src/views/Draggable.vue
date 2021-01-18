@@ -32,9 +32,6 @@
     <v-btn class="add-kanban-list mr-4" outlined @click="addNewList">
       リストを追加する
     </v-btn>
-    <!-- <rawDisplayer class="col-3" :value="list1" title="List 1" />
-
-    <rawDisplayer class="col-3" :value="list2" title="List 2" /> -->
   </div>
 </template>
 <script>
@@ -52,30 +49,23 @@ export default {
       drag: false,
       lists: [{
         title: "自分", tasks: [
-          { name: "John", id: 1 },
-          { name: "Joao", id: 2 },
-          { name: "Jean", id: 3 },
-          { name: "Gerard", id: 4 }
+          { name: "John", id: 1, right: [{ name: "AB", color: "indigo" }, { name: "CD", color: "orange" }] },
+          { name: "Joao", id: 2, right: [] },
+          { name: "Jean", id: 3, right: [{ name: "AB", color: "indigo" }, { name: "CD", color: "orange" }, { name: "EF", color: "green" }] },
+          { name: "Gerard", id: 4, right: [{ name: "AB", color: "indigo" }, { name: "CD", color: "orange" }, { name: "EF", color: "green" }, { name: "GH", color: "#808000" }] }
         ]
       }, {
         title: "Aさん", tasks: [
-          { name: "Juan", id: 5 },
-          { name: "Edgard", id: 6 },
-          { name: "Johnson", id: 7 }
+          { name: "Juan", id: 5, right: [] },
+          { name: "Edgard", id: 6, right: [] },
+          { name: "Johnson", id: 7, right: [] }
         ]
       }, {
         title: "Bさん", tasks: [
-          { name: "Taro", id: 8 },
-          { name: "Jiro", id: 9 },
-          { name: "Saburo", id: 10 },
-          { name: "Shiro", id: 11 }
-        ]
-      }, {
-        title: "Cさん", tasks: [
-          { name: "Issue 1", id: 12 },
-          { name: "Issue 2", id: 13 },
-          { name: "Issue 3", id: 14 },
-          { name: "Issue 4", id: 15 }
+          { name: "Taro", id: 8, right: [] },
+          { name: "Jiro", id: 9, right: [] },
+          { name: "Saburo", id: 10, right: [] },
+          { name: "Shiro", id: 11, right: [] }
         ]
       }]
     };
@@ -85,8 +75,7 @@ export default {
       const id = Math.floor(Math.random() * (500 - 100) + 100);
       list.push({ name: "Issue" + id, id });
     },
-    log: function(e) {
-      window.console.log(e);
+    log: function() {
     },
     addNewList() {
       this.lists.push({ title: "New List", tasks: [] });

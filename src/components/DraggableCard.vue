@@ -3,13 +3,16 @@
     <v-card class="kanban-card" elevation="2" tile outlined>
       {{ element.name }}
       <div class="card-right">
-        <v-avatar color="indigo" size="24">
-          <span class="white--text">AB</span>
+        <v-avatar
+          class="avater"
+          :color="item.color"
+          size="24"
+          v-for="(item, key) in topThree"
+          :key="key"
+        >
+          <span class="white--text">{{ item.name }}</span>
         </v-avatar>
-        <v-avatar color="orange" size="24" style="margin-left: -10px">
-          <span class="white--text">CD</span>
-        </v-avatar>
-        <span class="avater-ellipsis">...</span>
+        <span class="avater-ellipsis" v-if="element.right.length > 3">...</span>
       </div>
     </v-card>
     <CardEditor
@@ -24,7 +27,6 @@
 <script>
 import Vue from 'vue';
 import CardEditor from "@/components/CardEditor";
-// import { User } from "../types/User";
 export default Vue.extend({
   name: "DraggableCard",
   components: {
@@ -35,12 +37,7 @@ export default Vue.extend({
   },
   data() {
     return {
-      statusChip: {},
-      isOpenEditor: false,
-      assignee: "",
-      notStartBgColor: "#f5f5f5",
-      inProgressBgColor: "#afeeee",
-      lateProgressBgColor: "#f08080"
+      isOpenEditor: false
     }
   },
   methods: {
@@ -49,6 +46,11 @@ export default Vue.extend({
     },
     closeDialog() {
       this.isOpenEditor = !this.isOpenEditor;
+    }
+  },
+  computed: {
+    topThree() {
+      return this.element.right.slice(0, 3);
     }
   }
 })
@@ -62,6 +64,9 @@ export default Vue.extend({
     display: initial;
     position: absolute;
     right: 8px;
+    .avater {
+      margin-left: -12px;
+    }
     .avater-ellipsis {
       vertical-align: sub;
     }
