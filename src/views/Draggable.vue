@@ -3,7 +3,11 @@
     <div class="kanban-list mr-4" v-for="(list, key) in lists" :key="key">
       <div class="title group-title">
         {{ list.title }}({{ list.tasks.length }})
-        <span><v-icon @click="deleteList(key)">mdi-delete</v-icon></span>
+        <span
+          ><v-icon v-if="isDeleteList" @click="deleteList(key)"
+            >mdi-delete</v-icon
+          ></span
+        >
       </div>
       <draggable
         class="list-group pt-2 pr-2 pl-2"
@@ -16,8 +20,13 @@
         @change="log"
       >
         <div slot="footer">
-          <v-btn class="mt-2" text secondary @click="add(list.tasks)"
-            >カードを追加する</v-btn
+          <v-btn
+            class="mt-2"
+            v-if="isAddList"
+            text
+            secondary
+            @click="add(list.tasks)"
+            >Add Card</v-btn
           >
         </div>
         <draggableCard
@@ -30,7 +39,7 @@
       </draggable>
     </div>
     <v-btn class="add-kanban-list mr-4" outlined @click="addNewList">
-      リストを追加する
+      Add List
     </v-btn>
   </div>
 </template>
@@ -67,7 +76,9 @@ export default {
           { name: "Saburo", id: 10, right: [] },
           { name: "Shiro", id: 11, right: [] }
         ]
-      }]
+      }],
+      isDeleteList: true,
+      isAddList: true
     };
   },
   methods: {
