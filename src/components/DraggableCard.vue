@@ -50,7 +50,7 @@ export default Vue.extend({
   },
   computed: {
     topThree() {
-      return this.element.right.slice(0, 3);
+      return this.element.right === undefined ? [] : this.element.right.slice(0, 3);
     }
   }
 })

@@ -84,7 +84,7 @@ export default {
   methods: {
     add: function(list) {
       const id = Math.floor(Math.random() * (500 - 100) + 100);
-      list.push({ name: "Issue" + id, id });
+      list.push({ name: "Issue" + id, id, right: [] });
     },
     log: function() {
     },
