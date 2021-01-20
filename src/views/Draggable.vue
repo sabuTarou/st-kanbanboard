@@ -22,17 +22,15 @@
         <div slot="footer">
           <v-btn
             class="mt-2"
-            :class="'show-add-input-btn-' + key"
-            v-if="isAddList"
+            v-if="isAddList && !list.isAdded"
             text
             secondary
-            @click="showCardInput(key)"
+            @click="list.isAdded = true"
             >Add Card</v-btn
           >
           <v-btn
             class="mt-2"
-            :class="'add-card-btn-' + key"
-            style="display: none"
+            v-if="list.isAdded"
             color="success"
             secondary
             @click="addCard(list.tasks, key)"
@@ -47,10 +45,9 @@
         >
         </draggableCard>
         <v-text-field
-          :class="'add-card-field-' + key"
+          v-if="list.isAdded"
           class="mt-1"
           background-color="white"
-          style="display: none"
         />
       </draggable>
     </div>
@@ -73,39 +70,34 @@ export default {
     return {
       drag: false,
       lists: [{
-        title: "自分", tasks: [
+        title: "自分",tasks: [
           { name: "John", id: 1, right: [{ name: "AB", color: "indigo" }, { name: "CD", color: "orange" }] },
           { name: "Joao", id: 2, right: [] },
           { name: "Jean", id: 3, right: [{ name: "AB", color: "indigo" }, { name: "CD", color: "orange" }, { name: "EF", color: "green" }] },
           { name: "Gerard", id: 4, right: [{ name: "AB", color: "indigo" }, { name: "CD", color: "orange" }, { name: "EF", color: "green" }, { name: "GH", color: "#808000" }] }
-        ]
+        ],
+        isAdded: false,
       }, {
         title: "Aさん", tasks: [
           { name: "Juan", id: 5, right: [] },
           { name: "Edgard", id: 6, right: [] },
           { name: "Johnson", id: 7, right: [] }
-        ]
+        ],
+        isAdded: false,
       }, {
         title: "Bさん", tasks: [
           { name: "Taro", id: 8, right: [] },
           { name: "Jiro", id: 9, right: [] },
           { name: "Saburo", id: 10, right: [] },
           { name: "Shiro", id: 11, right: [] }
-        ]
+        ],
+        isAdded: false,
       }],
       isDeleteList: true,
-      isAddList: true
+      isAddList: true,
     };
   },
   methods: {
-    showCardInput(key) {
-      const dom = document.querySelector(".add-card-field-" + key);
-      const showBtn = document.querySelector(".show-add-input-btn-" + key);
-      const submitCardBtn = document.querySelector(".add-card-btn-" + key);
-      dom.style.display = "block";
-      showBtn.style.display = "none";
-      submitCardBtn.style.display = "block";
-    },
     addCard(list, key) {
       document.querySelector(".add-card-field-" + key);
       const id = Math.floor(Math.random() * (500 - 100) + 100);
