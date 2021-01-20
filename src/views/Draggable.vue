@@ -22,10 +22,20 @@
         <div slot="footer">
           <v-btn
             class="mt-2"
+            :class="'show-add-input-btn-' + key"
             v-if="isAddList"
             text
             secondary
-            @click="add(list.tasks)"
+            @click="showCardInput(key)"
+            >Add Card</v-btn
+          >
+          <v-btn
+            class="mt-2"
+            :class="'add-card-btn-' + key"
+            style="display: none"
+            color="success"
+            secondary
+            @click="addCard(list.tasks, key)"
             >Add Card</v-btn
           >
         </div>
@@ -36,6 +46,12 @@
           :key="index"
         >
         </draggableCard>
+        <v-text-field
+          :class="'add-card-field-' + key"
+          class="mt-1"
+          background-color="white"
+          style="display: none"
+        />
       </draggable>
     </div>
     <v-btn class="add-kanban-list mr-4" outlined @click="addNewList">
@@ -82,11 +98,21 @@ export default {
     };
   },
   methods: {
-    add: function(list) {
-      const id = Math.floor(Math.random() * (500 - 100) + 100);
-      list.push({ name: "Issue" + id, id, right: [] });
+    showCardInput(key) {
+      const dom = document.querySelector(".add-card-field-" + key);
+      const showBtn = document.querySelector(".show-add-input-btn-" + key);
+      const submitCardBtn = document.querySelector(".add-card-btn-" + key);
+      dom.style.display = "block";
+      showBtn.style.display = "none";
+      submitCardBtn.style.display = "block";
     },
-    log: function() {
+    addCard(list, key) {
+      document.querySelector(".add-card-field-" + key);
+      const id = Math.floor(Math.random() * (500 - 100) + 100);
+      const cardObj = { name: "aaa", id, right: [] };
+      list.push(cardObj);
+    },
+    log() {
     },
     addNewList() {
       this.lists.push({ title: "New List", tasks: [] });
@@ -104,7 +130,7 @@ export default {
         ghostClass: "ghost"
       };
     }
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
