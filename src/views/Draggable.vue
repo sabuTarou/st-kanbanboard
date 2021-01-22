@@ -23,7 +23,7 @@
           <v-btn
             class="mt-2"
             :class="'show-add-input-btn-' + key"
-            v-if="isAddList"
+            v-if="showAddCardBtn[key]"
             text
             secondary
             @click="showCardInput(key)"
@@ -32,9 +32,9 @@
           <v-btn
             class="mt-2"
             :class="'add-card-btn-' + key"
-            style="display: none"
             color="success"
             secondary
+            v-if="!showAddCardBtn[key]"
             @click="addCard(list.tasks, key)"
             >Add Card</v-btn
           >
@@ -50,7 +50,8 @@
           :class="'add-card-field-' + key"
           class="mt-1"
           background-color="white"
-          style="display: none"
+          v-if="!showAddCardBtn[key]"
+          @change="changeTitleField($event, key)"
         />
       </draggable>
     </div>
@@ -94,31 +95,38 @@ export default {
         ]
       }],
       isDeleteList: true,
-      isAddList: true
+      isAddList: true,
+      newTitle: [],
+      showAddCardBtn: []
     };
   },
   methods: {
     showCardInput(key) {
-      const dom = document.querySelector(".add-card-field-" + key);
-      const showBtn = document.querySelector(".show-add-input-btn-" + key);
-      const submitCardBtn = document.querySelector(".add-card-btn-" + key);
-      dom.style.display = "block";
-      showBtn.style.display = "none";
-      submitCardBtn.style.display = "block";
+      this.$set(this.showAddCardBtn, [key], false);
     },
     addCard(list, key) {
-      document.querySelector(".add-card-field-" + key);
       const id = Math.floor(Math.random() * (500 - 100) + 100);
-      const cardObj = { name: "aaa", id, right: [] };
+      const cardObj = { name: this.newTitle[key], id, right: [] };
       list.push(cardObj);
+      this.newTitle[key] = "";
+      this.$set(this.showAddCardBtn, [key], true);
+    },
+    changeTitleField(e, key) {
+      this.newTitle[key] = e;
     },
     log() {
     },
     addNewList() {
       this.lists.push({ title: "New List", tasks: [] });
+      this.showAddCardBtnConstructor();
     },
     deleteList(key) {
       this.lists.splice(key, 1);
+    },
+    showAddCardBtnConstructor() {
+      for (let i = 0; i < this.lists.length; i++) {
+        this.showAddCardBtn[i] = true;
+      }
     }
   },
   computed: {
@@ -131,6 +139,9 @@ export default {
       };
     }
   },
+  created() {
+    this.showAddCardBtnConstructor();
+  }
 };
 </script>
 <style lang="scss" scoped>
