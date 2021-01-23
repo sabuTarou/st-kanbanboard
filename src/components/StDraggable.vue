@@ -39,13 +39,13 @@
             >Add Card</v-btn
           >
         </div>
-        <draggableCard
+        <stDraggableCard
           class="list-group-item item"
           v-for="(element, index) in list.tasks"
           :element="element"
           :key="index"
         >
-        </draggableCard>
+        </stDraggableCard>
         <v-text-field
           :class="'add-card-field-' + key"
           class="mt-1"
@@ -62,13 +62,13 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import draggableCard from "@/components/DraggableCard";
+import stDraggableCard from "@/components/StDraggableCard";
 
 export default {
   name: "Draggable",
   components: {
     draggable,
-    draggableCard
+    stDraggableCard
   },
   props: {
     lists: {

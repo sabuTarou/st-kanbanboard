@@ -1,6 +1,6 @@
 <template>
   <div class="draggablePage">
-    <Draggable
+    <StDraggable
       :lists="lists"
       :isDeleteList="true"
       :isAddList="true"
@@ -14,12 +14,12 @@
 
 <script>
 // @ is an alias to /src
-import Draggable from '@/components/Draggable'
+import StDraggable from '@/components/StDraggable'
 
 export default {
   name: 'DraggablePage',
   components: {
-    Draggable
+    StDraggable
   },
   data() {
     return {

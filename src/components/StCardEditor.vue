@@ -15,7 +15,7 @@
 
 <script lang="ts">
 export default {
-  name: "CardEditor",
+  name: "StCardEditor",
   props: {
     isOpenEditor: {
       type: Boolean,
