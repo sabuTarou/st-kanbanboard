@@ -15,7 +15,7 @@
         <span class="avater-ellipsis" v-if="element.right.length > 3">...</span>
       </div>
     </v-card>
-    <CardEditor
+    <StCardEditor
       v-if="isOpenEditor"
       :element="element"
       :isOpenEditor="isOpenEditor"
@@ -26,11 +26,11 @@
 
 <script>
 import Vue from 'vue';
-import CardEditor from "@/components/CardEditor";
+import StCardEditor from "@/components/StCardEditor";
 export default Vue.extend({
-  name: "DraggableCard",
+  name: "StDraggableCard",
   components: {
-    CardEditor
+    StCardEditor
   },
   props: {
     element: {}
