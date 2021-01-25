@@ -17,13 +17,13 @@
         v-bind="dragOptions"
         @start="drag = true"
         @end="drag = false"
-        @change="log"
+        @change="onChange($event, key)"
       >
         <div slot="footer">
           <v-btn
             class="mt-2"
             :class="'show-add-input-btn-' + key"
-            v-if="isAddList"
+            v-if="showAddCardBtn[key]"
             text
             secondary
             @click="showCardInput(key)"
@@ -32,25 +32,26 @@
           <v-btn
             class="mt-2"
             :class="'add-card-btn-' + key"
-            style="display: none"
             color="success"
             secondary
+            v-if="!showAddCardBtn[key]"
             @click="addCard(list.tasks, key)"
             >Add Card</v-btn
           >
         </div>
-        <draggableCard
+        <stDraggableCard
           class="list-group-item item"
           v-for="(element, index) in list.tasks"
           :element="element"
           :key="index"
         >
-        </draggableCard>
+        </stDraggableCard>
         <v-text-field
           :class="'add-card-field-' + key"
           class="mt-1"
           background-color="white"
-          style="display: none"
+          v-if="!showAddCardBtn[key]"
+          @change="changeTitleField($event, key)"
         />
       </draggable>
     </div>
@@ -61,64 +62,69 @@
 </template>
 <script>
 import draggable from "vuedraggable";
-import draggableCard from "@/components/DraggableCard";
+import stDraggableCard from "@/components/StDraggableCard";
 
 export default {
   name: "Draggable",
   components: {
     draggable,
-    draggableCard
+    stDraggableCard
+  },
+  props: {
+    lists: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    },
+    isDeleteList: {
+      type: Boolean,
+      default: false
+    },
+    isAddList: {
+      type: Boolean,
+      default: false
+    },
   },
   data() {
     return {
       drag: false,
-      lists: [{
-        title: "自分", tasks: [
-          { name: "John", id: 1, right: [{ name: "AB", color: "indigo" }, { name: "CD", color: "orange" }] },
-          { name: "Joao", id: 2, right: [] },
-          { name: "Jean", id: 3, right: [{ name: "AB", color: "indigo" }, { name: "CD", color: "orange" }, { name: "EF", color: "green" }] },
-          { name: "Gerard", id: 4, right: [{ name: "AB", color: "indigo" }, { name: "CD", color: "orange" }, { name: "EF", color: "green" }, { name: "GH", color: "#808000" }] }
-        ]
-      }, {
-        title: "Aさん", tasks: [
-          { name: "Juan", id: 5, right: [] },
-          { name: "Edgard", id: 6, right: [] },
-          { name: "Johnson", id: 7, right: [] }
-        ]
-      }, {
-        title: "Bさん", tasks: [
-          { name: "Taro", id: 8, right: [] },
-          { name: "Jiro", id: 9, right: [] },
-          { name: "Saburo", id: 10, right: [] },
-          { name: "Shiro", id: 11, right: [] }
-        ]
-      }],
-      isDeleteList: true,
-      isAddList: true
+      newTitle: [],
+      showAddCardBtn: []
     };
   },
   methods: {
     showCardInput(key) {
-      const dom = document.querySelector(".add-card-field-" + key);
-      const showBtn = document.querySelector(".show-add-input-btn-" + key);
-      const submitCardBtn = document.querySelector(".add-card-btn-" + key);
-      dom.style.display = "block";
-      showBtn.style.display = "none";
-      submitCardBtn.style.display = "block";
+      this.$set(this.showAddCardBtn, [key], false);
     },
     addCard(list, key) {
-      document.querySelector(".add-card-field-" + key);
       const id = Math.floor(Math.random() * (500 - 100) + 100);
-      const cardObj = { name: "aaa", id, right: [] };
+      const cardObj = { name: this.newTitle[key], id, right: [] };
       list.push(cardObj);
+      this.newTitle[key] = "";
+      this.$set(this.showAddCardBtn, [key], true);
+      this.$emit("addCard", key, cardObj);
     },
-    log() {
+    changeTitleField(e, key) {
+      this.newTitle[key] = e;
+    },
+    onChange(e, key) {
+      this.$emit("onChange", e, key);
     },
     addNewList() {
-      this.lists.push({ title: "New List", tasks: [] });
+      const listTitle = "New List";
+      this.lists.push({ title: listTitle, tasks: [] });
+      this.showAddCardBtnConstructor();
+      this.$emit("addList", listTitle);
     },
     deleteList(key) {
       this.lists.splice(key, 1);
+      this.$emit("deleteList", key);
+    },
+    showAddCardBtnConstructor() {
+      for (let i = 0; i < this.lists.length; i++) {
+        this.showAddCardBtn[i] = true;
+      }
     }
   },
   computed: {
@@ -131,6 +137,9 @@ export default {
       };
     }
   },
+  created() {
+    this.showAddCardBtnConstructor();
+  }
 };
 </script>
 <style lang="scss" scoped>
