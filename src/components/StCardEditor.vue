@@ -14,7 +14,8 @@
 </template>
 
 <script lang="ts">
-export default {
+import Vue from "vue";
+export default Vue.extend({
   name: "StCardEditor",
   props: {
     isOpenEditor: {
@@ -34,5 +35,5 @@ export default {
       this.$emit("closeDialog");
     }
   },
-}
+})
 </script>
